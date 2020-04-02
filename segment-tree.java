@@ -6,6 +6,10 @@ class Demo {
 		System.out.println( tree.find(0, 1) );
 		System.out.println( tree.find(5, 7) );
 		System.out.println( tree.find(2, 6) );
+		tree.replace(1, 9);
+		System.out.println( tree.find(1, 6) );
+		tree.replace(5, 3);
+		System.out.println( tree.find(2, 7) );
 	}
 }
 class SegmentTree {
@@ -52,7 +56,21 @@ class SegmentTree {
 		if (e.value < e.right.value) { e.value = e.right.value; }
 		return e;
 	}
-
+	void replace(int index, int value) {
+		data[index] = value;
+		replace(root, index, value);
+	}
+	void replace(Node e, int index, int value) {
+		if (e.start == index && e.finish == index) {
+			e.value = value;
+			return;
+		}
+		int mid = (e.start + e.finish) / 2;
+		if (index   <= mid)   { replace(e.left,  index, value); }
+		if (mid + 1 <= index) { replace(e.right, index, value); }
+		e.value = e.left.value;
+		if (e.value < e.right.value) { e.value = e.right.value; }
+	}
 	class Node {
 		int value;
 		int start;
