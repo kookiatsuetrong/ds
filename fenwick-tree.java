@@ -1,10 +1,39 @@
-  class Demo {
+/*
+
+Fenwick Tree
+- insert 
+- create O(n log n)
+- query  O(log n)
+- change O(log n)
+
+Segment Tree
+- insert
+- create O(n log n)
+- query  O(log n)
+- change O(log n)
+
+Bruce Force:
+- insert
+- create O(n)
+- query  O(n)
+- change O(1)
+
+Prefix Calculation:
+- insert
+- create O(n)
+- query  O(1)
+- change O(n)
+
+*/
+
+class Demo {
 	public static void main(String[] commands) {
 		FenwickTree tree = new FenwickTree(2, 3, 2, 4, 7, 5, 1, 2, 8);
 										// 0  1  2  3  4  5  6  7  8
 										// 2  5  7 11 18 23 24 26 34
-		for (int i = 0; i < 9; i++) {
-			System.out.printf("%3d", tree.sum(i));
+		System.out.printf("%3d", tree.query(0));
+		for (int i = 1; i < 9; i++) {
+			System.out.printf("%3d", tree.query(i) - tree.query(i-1));
 		}
 		System.out.println();
 	}
@@ -21,23 +50,23 @@ class FenwickTree {
 		element[index] += value;
 		int next = 1;
 		while ((index | next) < element.length) {
-			if ((index | next) != index) {
-				index += next;
+			if ((index | next) == index + next) {
+				index |= next;
 				element[index] += value;
 			}
 			next *= 2;
 		}
 	}
-	int sum(int index) {
-		int t = element[index];
+	int query(int index) {
+		int total = element[index];
 		int next = 1;
-		while (index - next > 0) {
-			if ((index | next) != index) {
+		while (index - next >= 0) {
+			if ((index | next) == index + next) {
 				index -= next;
-				t += element[index];
+				total += element[index];
 			}
 			next *= 2;
 		}
-		return t;
+		return total;
 	}
 }
